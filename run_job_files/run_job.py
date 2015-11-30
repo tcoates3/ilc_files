@@ -97,7 +97,6 @@ if __name__ == '__main__':
   logger.addHandler(fh)
 
   # Filenames of stdhep_file and slcio_file
-  #basename = os.path.splitext(os.path.basename(sin_file))[0] 
   stdhep_file = log_dir+'/whizard/'+basename+'.stdhep'
   slcio_file = log_dir+'/mokka/'+basename+'.slcio'
   	

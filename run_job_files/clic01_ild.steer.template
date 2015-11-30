@@ -1,0 +1,75 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# LOCAL MYSQL SERVER, OR pollin1.in2p3.fr
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#/Mokka/init/dbHost pollin1.in2p3.fr
+#/Mokka/init/dbHost polui01.in2p3.fr
+#/Mokka/init/dbHost pccds03.cern.ch
+/Mokka/init/user consult
+/Mokka/init/dbPasswd consult
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# DETECTOR MODEL
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#/Mokka/init/detectorModel ILD_00fwp01
+/Mokka/init/detectorModel CLIC_ILD_CDR
+#/Mokka/init/detectorModel SiD01
+#/Mokka/init/lorentzTransformationAngle 10 mrad 
+/Mokka/init/physicsListName QGSP_BERT
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Verbosity / Batch Mode
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Mokka/init/printLevel 0
+/Mokka/init/BatchMode false
+
+/Mokka/init/initialMacroFile <MACRO_FILE>
+#/Mokka/init/initialMacroFile opengraphics.mac
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Changing the Geometry
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#/Mokka/init/EditGeometry/rmSubDetector all
+
+#/Mokka/init/EditGeometry/addSubDetector SHcalSc02 300
+
+
+#/Mokka/init/globalModelParameter Hcal_nlayers 30
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# OUTPUT OF SLCIO/ASCII
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Name of LCIO output file - this implies LCIO output !!
+/Mokka/init/lcioFilename <SLCIO_FILE>
+
+# Write mode of LCIO output file: WRITE_APPEND or WRITE_NEW
+# if not specified the program will exit if the file already exists (safe mode)
+# ------------------------------------------------------------------------------
+/Mokka/init/lcioWriteMode WRITE_NEW
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# GENERAL VARIABLES (ENVIRONMENT / CUTS)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Mokka/init/rangeCut 0.005 mm
+#  specifies the production Geant4 range cut
+#  [default is 0.005 mm ]
+
+
+
+
+/Mokka/init/lcioStoreCalHitPosition true
+#/Mokka/init/TPCCut 0.0 keV #Default is 10MeV
+/Mokka/init/lcioDetailedShowerMode true
+
+
+#/Mokka/init/globalModelParameter use_tracker true
+#/Mokka/init/lcioStoreTRKHitMomentum proto
+

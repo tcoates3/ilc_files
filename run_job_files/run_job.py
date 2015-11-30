@@ -47,7 +47,12 @@ if __name__ == '__main__':
   # Expand OS variables
   project_dir=os.path.expandvars(project_dir)
   base_log_dir=project_dir+'/run_job/Outputs'
-
+  
+#  if os.path.isdir(base_log_dir) == False:
+#    os.makedirs(base_log_dir)
+#  else: 
+#    logger.warning('Outputs dir: {} already exists.'.format(base_log_dir))
+  
   # Set up logging
   logger = logging.getLogger('run_job')
   if args.debug == True:
@@ -63,12 +68,12 @@ if __name__ == '__main__':
   # Add handlers to logger
   logger.addHandler(ch)
 
-  #EDIT - Defining basename (moved to make other things work)
+  #EDIT - Defining basename (moved from below since basename is needed here now)
   basename = os.path.splitext(os.path.basename(sin_file))[0] 
 
   # EDIT - creates event directory
   event_dir=base_log_dir+'/'+basename
-  # Attempt to make log_dir
+  # Checks whether the event_dir exists, and if not, creates it
   if os.path.isdir(event_dir) == False:
     os.makedirs(event_dir)
   else: 
@@ -77,7 +82,7 @@ if __name__ == '__main__':
   # Create a log_dir in the same location as the destination directory,
   # relative to the log_dir argument given on the command line
   log_dir=event_dir+'/'+TIME_START+'-'+str(num_runs)+"events"
-  # Attempt to make the log_dir
+  # Tries to make the log_dir
   try:
     os.makedirs(log_dir)
   except OSError:

@@ -1,0 +1,71 @@
+
+model = SM
+
+mH = 125 GeV
+mZ = 91.2 GeV
+#mc = 0 GeV
+#ms = 0 GeV
+
+#alias V = Z:h
+
+alias n = n1:n2:n3
+alias anti_n = N1:N2:N3 
+
+alias q = u:d
+alias anti_q = U:D
+
+
+process ttV = e1, E1 => (t, T, Z) + (t, T, h)
+
+
+#decays of Higgs
+process h_dec_bB = h => b, B
+process h_dec_tautau = h => e3, E3
+
+#decays of Z boson
+process Z_dec_nN = Z => n, anti_n
+process Z_dec_qQ = Z => q, anti_q
+
+#decay of t and T
+process t1_dec = t => Wp, b
+process t2_dec = T => Wm, B
+
+
+unstable Z (Z_dec_nN, Z_dec_qQ)
+unstable h (h_dec_bB, h_dec_tautau)
+unstable t (t1_dec)
+unstable T (t2_dec)
+unstable Wp () { ?auto_decays = true } 
+unstable Wm () { ?auto_decays = true } 
+
+compile
+
+sqrts = 1 TeV
+beams = e1, E1
+
+?ps_fsr_active = true
+?ps_isr_active = true
+?hadronization_active = true
+
+ps_max_n_flavors = 5
+ps_mass_cutoff = 1
+
+?mlm_matching = true
+mlm_nmaxMEjets = 2
+mlm_Rmin = 1
+mlm_ETclusminE = 10 GeV
+real ycut = mlm_ETclusminE**2
+
+cuts = all M >= 10 GeV [q,anti_q]
+
+integrate(ttV)
+
+n_events = 10
+
+$extension_stdhep="stdhep"	
+sample_format = stdhep		
+
+simulate(ttV)
+
+show (results)
+

@@ -126,7 +126,8 @@ if __name__ == '__main__':
     proc = subprocess.Popen(cmd, shell=True, universal_newlines=True, stdout=steer)
 
   logger.info('Running whizard...')
-  whizard_job_name = 'whizard'  whizard_command = 'cd {0} && mkdir whizard && cd whizard && source /lustre/scratch/epp/ilc/ILCsetup.sh; whizard {0}/{1}'.format(log_dir, sin_file)
+  whizard_job_name = 'whizard'
+  whizard_command = 'cd {0} && mkdir whizard && cd whizard && source /lustre/scratch/epp/ilc/ILCsetup.sh; whizard {0}/{1}'.format(log_dir, sin_file)
   whizard_output = log_dir+'/'+'whizard.job.log'
   whizard_job_id = submit_job(whizard_job_name, whizard_command, whizard_output, 'mps.q@node212')
 

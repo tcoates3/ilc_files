@@ -21,4 +21,4 @@ To use, make sure that the ILCsetup.sh file has been sourced, then type:
 
     run_job <sindarin file>
 
-This (should) do everything right, since the methods for finding directories are now (relatively) robust. This command will create a folder within your /run_job/Outputs directory titled with the name of the sindarin file. Within this will be another folder named with timestamp of when the run_job command was issued, followed by the number of events it was run for.
+This (should) do everything right, since the methods for finding directories are now (relatively) robust. This command will create a folder within your /run_job/output directory titled with the name of the Sindarin file. Within this will be another folder named with timestamp of when the run_job command was issued, followed by the number of events it was run for.

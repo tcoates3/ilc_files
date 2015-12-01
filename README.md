@@ -1,21 +1,27 @@
 # run_job
 
-##INSTALLATION
+## INSTALLATION
 
 1) In your terminal on Feynman, type:
 
     git clone https://github.com/tcoates3/run_job run_job
 
-2) Navigate into the /run_job directory and create an directory called /Outputs:
+2) Navigate into the /run_job directory and create a directory called /Outputs:
 
     cd run_job
     mkdir Outputs
 
-3) Then, in your ~/.bashrc file, add the following line:
+3) Then edit your .bashrc and add an alias:
 
-    alias run_job="python /lustre/scratch/epp/ilc/tc297/run_job/run_job_files/run_job.py"
+    emacs ~/.bashrc &
+    alias run_job="python <full path to run_job directory>/run_job/run_job_files/run_job.py"
 
-##USAGE
+4) Exit and re-connect to Feynman, so the .bashrc file is sourced automatically:
+
+    exit
+    ssh -X -Y <username>.feynman.hpc.sussex.ac.uk
+
+## USAGE
 
 To use, make sure that the ILCsetup.sh file has been sourced, then type:
 

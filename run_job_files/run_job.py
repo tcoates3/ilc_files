@@ -55,18 +55,18 @@ if __name__ == '__main__':
   project_dir=os.path.expandvars(project_dir)
   base_log_dir=project_dir+'/run_job/output'
 
-  # Checks to see whether the base_log_dir exists and if it doesn't, makes it. Should only be important the first time the script is run. 
-  if os.path.isdir(base_log_dir) == False:
-    os.makedirs(base_log_dir)
-  else: 
-    logger.warning('Outputs dir: {} already exists.'.format(base_log_dir))
-
   # Set up logging
   logger = logging.getLogger('run_job')
   if args.debug == True:
     logger.setLevel(logging.DEBUG)
   else:
     logger.setLevel(logging.INFO)
+
+  # Checks to see whether the base_log_dir exists and if it doesn't, makes it. Should only be important the first time the script is run. 
+  if os.path.isdir(base_log_dir) == False:
+    os.makedirs(base_log_dir)
+  else: 
+    logger.warning('Outputs dir: {} already exists.'.format(base_log_dir))
 
   # Create console handler
   ch = logging.StreamHandler()

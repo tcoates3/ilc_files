@@ -4,7 +4,7 @@
 
 1) In your terminal on Feynman, type:
 
-    git clone https://github.com/tcoates3/run_job run_job
+    git clone https://github.com/tcoates3/run_job /lustre/scratch/epp/ilc/<username>/run_job
 
 2) Navigate into the /run_job directory and create a directory called /Outputs:
 
@@ -14,7 +14,7 @@
 3) Then edit your .bashrc and add an alias:
 
     emacs ~/.bashrc &
-    alias run_job="python <full path to run_job directory>/run_job/run_job_files/run_job.py"
+    alias run_job="python <full path to lustre/scratch/epp/ilc/<username>/run_job/run_job_files/run_job.py"
 
 4) Exit and re-connect to Feynman, so the .bashrc file is sourced automatically:
 

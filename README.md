@@ -1,6 +1,6 @@
-## run_job
+# run_job
 
-#INSTALLATION
+##INSTALLATION
 
 1) In your terminal on Feynman, type:
 
@@ -15,7 +15,7 @@
 
     alias run_job="python /lustre/scratch/epp/ilc/tc297/run_job/run_job_files/run_job.py"
 
-#USAGE
+##USAGE
 
 To use, make sure that the ILCsetup.sh file has been sourced, then type:
 

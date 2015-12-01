@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
   # Expand OS variables
   project_dir=os.path.expandvars(project_dir)
-  base_log_dir=project_dir+'/run_job/output'
+  base_log_dir=project_dir+'/ilc_files/run_job/output'
 
   # Set up logging
   logger = logging.getLogger('run_job')

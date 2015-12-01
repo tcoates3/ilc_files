@@ -33,26 +33,33 @@ if __name__ == '__main__':
   # Define command line interface
   parser = argparse.ArgumentParser(description='run_job')
   parser.add_argument('sin_file', action="store", help='path to input.sin file')
-  parser.add_argument('num_runs', action="store", help='number of runs')
+  #Commented this line as the code now grabs num_runs from the .sin file
+  #parser.add_argument('num_runs', action="store", help='number of runs')
   parser.add_argument('--debug', action="store_true", dest='debug', default=False, help='Enable debug output')
-  parser.add_argument('--project_dir', action="store", dest='project_dir', default='/lustre/scratch/epp/ilc/$USER', help='Full path to where the Outputs folder will be')
-#  parser.add_argument('--log_dir', action="store", dest='log_dir', default='/lustre/scratch/epp/ilc/$USER/logs', help='Full path to where logs')
+  parser.add_argument('--project_dir', action="store", dest='project_dir', default='/lustre/scratch/epp/ilc/$USER', help='Full path to where the output folder will be')
+  #parser.add_argument('--log_dir', action="store", dest='log_dir', default='/lustre/scratch/epp/ilc/$USER/logs', help='Full path to where logs')
   parser.add_argument('--overwrite', action="store_true", dest='overwrite', default=False, help='If the log directory already exists allow it to be overwritten')
   args = parser.parse_args()
 
-  # Core arguments. Santize the inputs somewhat by removing whitespace and trailing '/'
+  #Core arguments. Santize the inputs somewhat by removing whitespace and trailing '/'
   sin_file=args.sin_file.strip().rstrip('/')
-  num_runs=args.num_runs.strip()
+ 
   project_dir=args.project_dir.strip().rstrip('/')
+
+  with open(sin_file) as f: lines = f.read().splitlines()
+  for line in lines:
+    if line.startswith('n_events ='):
+      num_runs = line.split('=')[-1].strip()
+
   # Expand OS variables
   project_dir=os.path.expandvars(project_dir)
-  base_log_dir=project_dir+'/run_job/Outputs'
+  base_log_dir=project_dir+'/run_job/output'
 
   # Checks to see whether the base_log_dir exists and if it doesn't, makes it. Should only be important the first time the script is run. 
-#  if os.path.isdir(base_log_dir) == False:
-#    os.makedirs(base_log_dir)
-#  else: 
-#    logger.warning('Outputs dir: {} already exists.'.format(base_log_dir))
+  if os.path.isdir(base_log_dir) == False:
+    os.makedirs(base_log_dir)
+  else: 
+    logger.warning('Outputs dir: {} already exists.'.format(base_log_dir))
 
   # Set up logging
   logger = logging.getLogger('run_job')
@@ -127,7 +134,7 @@ if __name__ == '__main__':
 
   logger.info('Running whizard...')
   whizard_job_name = 'whizard'
-  whizard_command = 'cd {0} && mkdir whizard && cd whizard && source /lustre/scratch/epp/ilc/ILCsetup.sh; whizard {0}/{1}'.format(log_dir, sin_file)
+  whizard_command = 'cd {} && mkdir whizard && cd whizard && source /lustre/scratch/epp/ilc/ILCsetup.sh; whizard {}/{}'.format(log_dir, log_dir, sin_file)
   whizard_output = log_dir+'/'+'whizard.job.log'
   whizard_job_id = submit_job(whizard_job_name, whizard_command, whizard_output, 'mps.q@node212')
 

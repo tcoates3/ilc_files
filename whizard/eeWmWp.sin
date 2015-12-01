@@ -1,0 +1,28 @@
+model = SM
+
+#ms = 0
+
+process eeWmWp = e1, E1 => Wp, Wm
+
+unstable Wp () { ?auto_decays = true } 
+unstable Wm () { ?auto_decays = true } 
+
+compile
+
+sqrts = 500 GeV
+beams = e1, E1
+
+?ps_fsr_active = true
+?ps_isr_active = true
+
+#integrate (eeWmWp) { iterations = 3:1000:"gw", 5:3000:"w", 5:10000 }
+integrate (eeWmWp) { iterations = 2:20000 }
+
+n_events = 100
+
+$extension_stdhep="stdhep"	
+sample_format = stdhep		#states that it is to produce a .stdhep file
+
+simulate(eeWmWp)
+
+show (results)

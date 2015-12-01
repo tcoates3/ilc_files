@@ -47,12 +47,13 @@ if __name__ == '__main__':
   # Expand OS variables
   project_dir=os.path.expandvars(project_dir)
   base_log_dir=project_dir+'/run_job/Outputs'
-  
+
+  # Checks to see whether the base_log_dir exists and if it doesn't, makes it. Should only be important the first time the script is run. 
 #  if os.path.isdir(base_log_dir) == False:
 #    os.makedirs(base_log_dir)
 #  else: 
 #    logger.warning('Outputs dir: {} already exists.'.format(base_log_dir))
-  
+
   # Set up logging
   logger = logging.getLogger('run_job')
   if args.debug == True:
@@ -68,12 +69,12 @@ if __name__ == '__main__':
   # Add handlers to logger
   logger.addHandler(ch)
 
-  #EDIT - Defining basename (moved from below since basename is needed here now)
+  #EDIT - Defining basename (moved to make other things work)
   basename = os.path.splitext(os.path.basename(sin_file))[0] 
 
   # EDIT - creates event directory
   event_dir=base_log_dir+'/'+basename
-  # Checks whether the event_dir exists, and if not, creates it
+  # Attempt to make log_dir
   if os.path.isdir(event_dir) == False:
     os.makedirs(event_dir)
   else: 
@@ -82,7 +83,7 @@ if __name__ == '__main__':
   # Create a log_dir in the same location as the destination directory,
   # relative to the log_dir argument given on the command line
   log_dir=event_dir+'/'+TIME_START+'-'+str(num_runs)+"events"
-  # Tries to make the log_dir
+  # Attempt to make the log_dir
   try:
     os.makedirs(log_dir)
   except OSError:
@@ -97,6 +98,7 @@ if __name__ == '__main__':
   logger.addHandler(fh)
 
   # Filenames of stdhep_file and slcio_file
+  #basename = os.path.splitext(os.path.basename(sin_file))[0] 
   stdhep_file = log_dir+'/whizard/'+basename+'.stdhep'
   slcio_file = log_dir+'/mokka/'+basename+'.slcio'
   	
@@ -124,8 +126,7 @@ if __name__ == '__main__':
     proc = subprocess.Popen(cmd, shell=True, universal_newlines=True, stdout=steer)
 
   logger.info('Running whizard...')
-  whizard_job_name = 'whizard'
-  whizard_command = 'cd {} && mkdir whizard && cd whizard && source /lustre/scratch/epp/ilc/ILCsetup.sh; whizard {}'.format(log_dir, sin_file)
+  whizard_job_name = 'whizard'  whizard_command = 'cd {0} && mkdir whizard && cd whizard && source /lustre/scratch/epp/ilc/ILCsetup.sh; whizard {0}/{1}'.format(log_dir, sin_file)
   whizard_output = log_dir+'/'+'whizard.job.log'
   whizard_job_id = submit_job(whizard_job_name, whizard_command, whizard_output, 'mps.q@node212')
 

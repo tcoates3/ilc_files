@@ -1,15 +1,15 @@
-# run_job
+# ilc_files
 
 ## INSTALLATION
 
 1) In your terminal on Feynman, type:
 
-    git clone https://github.com/tcoates3/run_job run_job
+    git clone https://github.com/tcoates3/ilc_files ilc_files
 
 2) Then edit your .bashrc and add an alias:
 
     emacs ~/.bashrc &
-    alias run_job="python <full path to run_job directory>/run_job/run_job_files/run_job.py"
+    alias run_job="python <full path to ilc_files directory>/ilc_files/run_job/run_job_files/run_job.py"
 
 3) In the terminal, to source the modified .bashrc, type:
 

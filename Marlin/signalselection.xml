@@ -1,0 +1,48 @@
+
+<marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
+<execute>
+<processor name="MyAIDAProcessor"/>
+<processor name="MySignalSeparator"/>             <!-- "MySignalSeparator"     . This is the name of the processor that Alasdair is using. I should change the name so that it is the one I am using  -->
+<processor name="MyLCIOOutputProcessor"/>
+</execute>
+
+<global>
+<parameter name="LCIOInputFiles">
+
+/home/t/tw/tw215/Documents/ILC/Marlin/SignalSeparator/lcioFiles/ttV/ttV.slcio
+
+<!--  this is where I include the lcio file directories. The files above are the ones given by alasdair -->
+
+
+</parameter>
+<parameter name="GearXMLFile" value="/home/t/tw/tw215/Documents/ILC/Marlin/SignalSeparator/build/GearOutput.xml"/>
+<parameter name="MaxRecordNumber" value="10000000"/>
+<parameter name="SkipNEvents" value="0"/>
+<parameter name="SupressCheck" value="false"/>
+<parameter name="Verbosity" value="MESSAGE"/>
+</global>
+<processor name="MyAIDAProcessor" type="AIDAProcessor">
+<!--
+Processor that handles AIDA files. Creates on directory per processor.  Processors only need to create and fill the histograms, clouds and tuples. Needs to be the first ActiveProcessor
+-->
+<!--
+ compression of output file 0: false >0: true (default) 
+-->
+<parameter name="Compress" type="int" value="1"/>
+<!--  filename without extension -->
+<parameter name="FileName" type="string" value="signal"/>
+<!--  type of output file root (default) or xml ) -->
+<parameter name="FileType" type="string" value="root"/>
+<!--
+verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")
+-->
+<!-- parameter name="Verbosity" type="string" value=""/ -->
+</processor>
+<processor name="MySignalSeparator" type="SignalSeparator">
+<parameter name="Choice" type="int">1</parameter>
+</processor>
+<processor name="MyLCIOOutputProcessor" type="LCIOOutputProcessor">
+<parameter name="LCIOOutputFile" type="string">ttV_Signal.slcio</parameter>
+<parameter name="LCIOWriteMode" type="string">WRITE_NEW</parameter>
+</processor>
+</marlin>

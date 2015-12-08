@@ -1,0 +1,168 @@
+These instructions have been modified from https://svnsrv.desy.de/viewvc/marlin/Marlin/trunk/README 
+
+The instructions online are in a strange order and the exact ordering is stated below. 
+
+========================================================================================================================
+I give instructions in the first section to install a useful Marlin processor I created: SignalSeparator
+Then in the second I give a general install instructions.
+
+***IMPORTANT***** DO NOT SOURCE ILCsetup.sh BEFORE DOING THIS. LOG INTO FEYNMAN AND THEN FOLLOW INSTRUCTIONS BELOW *****
+========================================================================================================================
+
+SECTION 1.    SIGNAL SEPARATOR PROCESSOR INSTALLATION
+
+
+   cd /lustre/scratch/epp/ilc/<your_username>/ 
+
+   mkdir Marlin
+
+   cd Marlin
+   
+   . /cvmfs/ilc.desy.de/sw/x86_64_gcc44_sl6/v01-17-07/init_ilcsoft.sh
+	 
+   cp -r $MARLIN/examples/mymarlin SignalSeparator
+
+   cd SignalSeparator/include/
+
+   rm MyProcessor.h
+   cp /lustre/scratch/epp/ilc/Examples/Marlin/SignalSeparator.h $PWD/
+
+   cd ../src/
+
+   rm MyProcessor.cc
+   cp /lustre/scratch/epp/ilc/Examples/Marlin/SignalSeparator.cc $PWD/
+
+   cd ..
+
+   rm CMakeLists.txt
+   cp /lustre/scratch/epp/ilc/Examples/Marlin/CMakeLists.txt 
+
+   mkdir build
+   cd build
+
+   cmake -C $ILCSOFT/ILCSoft.cmake ..
+
+   make install
+
+   ##execute the next command but change <your_username>####
+
+   export MARLIN_DLL='/lustre/scratch/epp/ilc/<your_username>/Marlin/SignalSeparator/lib/libSignalSeparator.so:/lustre/scratch/epp/ilc/<your_username>/Marlin/SignalSeparator/lib/libSignalSeparator.so.0.1:/lustre/scratch/epp/ilc/<your_username>/Marlin/SignalSeparator/lib/libSignalSeparator.so.0.1.0'
+
+
+   Marlin -x
+
+
+This has now setup a Marlin processor named SignalSeparator. This processor collects event information and fills various histograms (see SignalSeparator.cc for code). 
+Next is very important. Go to the ILCsetup.sh file that you copied into your dir i.e. /lustre/scratch/epp/ilc/<your_username>/ and open it. 
+
+At the bottom of the file there is a section where the MARLIN_DLL environment variable is defined. Here you need to copy the following lines:
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------   
+export MARLIN_DLL='/lustre/scratch/epp/ilc/<your_username>/Marlin/SignalSeparator/lib/libSignalSeparator.so:/lustre/scratch/epp/ilc/<your_username>/Marlin/SignalSeparator/lib/libSignalSeparator.so.0.1:/lustre/scratch/epp/ilc/<your_username>/Marlin/SignalSeparator/lib/libSignalSeparator.so.0.1.0'
+---------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+making sure to change <your_username>
+
+
+Now time to test. 
+
+
+logout of feynman and then reconnect to feynman.
+
+       cd /lustre/scratch/epp/ilc/<your_username>/
+
+       source ILCsetup.sh
+
+       cd Marlin/SignalSeparator/build/
+
+       Marlin -x
+
+
+This should now print an example steering file.
+
+Installation Complete!
+
+
+
+
+================================================================================================================================================
+================================================================================================================================================
+
+
+SECTION 2.	GENERAL INSTALLATION OF PROCESSOR
+
+ 
+   cd /lustre/scratch/epp/ilc/<your_username>/ 
+
+   mkdir Marlin
+
+   cd Marlin
+   
+   . /cvmfs/ilc.desy.de/sw/x86_64_gcc44_sl6/v01-17-07/init_ilcsoft.sh
+	 
+   cp -r $MARLIN/examples/mymarlin <name_of_Processor>
+
+   cd <name_of_Processor>/include/
+
+   mv MyProcessor.h <name_of_Processor>.h
+ 
+
+   cd ../src/
+
+   mv MyProcessor.cc <name_of_Processor>.cc
+
+   cd ..
+
+   emacs CMakeLists 
+
+Next edit line 9 to read:
+
+   # project name
+   PROJECT( <name_of_Processor> )
+
+   save and close CMakeLists.txt
+
+   mkdir build
+   cd build
+
+   cmake -C $ILCSOFT/ILCSoft.cmake ..
+
+   make install
+
+   ##execute the next command but change <your_username> and <name_of_Processor> ####
+
+   export MARLIN_DLL='/lustre/scratch/epp/ilc/<your_username>/Marlin/<name_of_Processor>/lib/lib<name_of_Processor>.so:/lustre/scratch/epp/ilc/<your_username>/Marlin/<name_of_Processor>/lib/lib<name_of_Processor>.so.0.1:/lustre/scratch/epp/ilc/<your_username>/Marlin/<name_of_Processor>/lib/lib<name_of_Processor>.so.0.1.0'
+
+
+   Marlin -x
+
+
+This has now setup a Marlin processor named <name_of_Processor>. 
+Next is very important. Go to the ILCsetup.sh file that you copied into your dir i.e. /lustre/scratch/epp/ilc/<your_username>/ and open it. 
+
+At the bottom of the file there is a section where the MARLIN_DLL environment variable is defined. Here you need to copy the following lines:
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------   
+export MARLIN_DLL='/lustre/scratch/epp/ilc/<your_username>/Marlin/<name_of_Processor>/lib/lib<name_of_Processor>.so:/lustre/scratch/epp/ilc/<your_username>/Marlin/<name_of_Processor>/lib/lib<name_of_Processor>.so.0.1:/lustre/scratch/epp/ilc/<your_username>/Marlin/<name_of_Processor>/lib/lib<name_of_Processor>.so.0.1.0'
+---------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+making sure to change <your_username> and <name_of_Processor>
+
+
+Now time to test. 
+
+
+logout of feynman and then reconnect to feynman.
+
+       cd /lustre/scratch/epp/ilc/<your_username>/
+
+       source ILCsetup.sh
+
+       cd Marlin/<name_of_Processor>/build/
+
+       Marlin -x
+
+
+This should now print an example steering file.
+
+Installation Complete!

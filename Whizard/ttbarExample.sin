@@ -1,0 +1,49 @@
+##############################################################
+## Example sindarin file of e+ e- => t t-bar . Both top     ##
+## quarks are unstable and will decay in defined processes. ##
+## The subsequent b quark hadronises, and the W boson is    ##
+## unstable. 	    	  	      	  	 	    ##
+##############################################################
+
+model = SM					#standard model
+
+alias j = t:T:g	     
+
+process ttbar = e1, E1 => t, T			#define the process
+    
+#decay of t and T
+process t1_dec = t => Wp, b			#defines the decay process of the top quark.
+process t2_dec = T => Wm, B			#only one decay process defined -> whizard assumes BR=100%
+
+
+unstable t (t1_dec)   	  			#states that the top quark decays via the process t1_dec, previously defined 
+unstable T (t2_dec)				#states that the anti-top quark decays via the process t2_dec, previously defined 
+unstable Wp () { ?auto_decays = true } 		#states that the W+ is unstable. Whizard deals with the decay modes. 
+unstable Wm () { ?auto_decays = true } 		#states that the W- is unstable. Whizard deals with the decay modes.
+
+sqrts = 1 TeV	 	      	     		#set c.o.m. energy to be 1 TeV
+beams = e1, E1					#define the beams as e+ e-
+
+compile	    					#this generates matrix elements by O'Mega
+
+
+?ps_fsr_active = true	  			#setting the final state radiation to be active
+?ps_isr_active = true	  			#setting the intial state radiation to be active
+?hadronization_active = true	   		#setting the hadronisation to be active
+
+ps_max_n_flavors = 5  				#defining the maximum no. of flavours involved in the hadronisation process to be 5
+ps_mass_cutoff = 1 				#standard value of this is 1, and it is related to the virtuality
+
+
+
+integrate(ttbar) 				#computes the total cross section of the process
+
+n_events = 10   				#run for 10 events
+
+
+$extension_stdhep="stdhep"	
+sample_format = stdhep				#produce .stdhep output file
+
+simulate(ttbar)					#generate an event sample
+
+show (results)					#print the current values

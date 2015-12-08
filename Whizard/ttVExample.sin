@@ -1,0 +1,114 @@
+#############################################################################
+## Example sindarin file for e+ e- => t t-bar V, where V is a vector boson ##
+## either Higgs or Z boson. All subsequent decays are defined, and runs    ##
+## for 10 events at a c.o.m. energy of 1 TeV. Analysis section included    ##
+## as an example of how to store histograms within Whizard.    		   ##
+#############################################################################
+
+
+model = SM						#Standard Model
+
+mH = 125 GeV						#define mass of Higgs
+mZ = 91.2 GeV						#define mass of Z boson
+mc = 0 GeV						#set charm mass to 0 GeV
+ms = 0 GeV						#set strange mass to 0 GeV
+
+alias n = n1:n2:n3					#create alias for n is any flavour neutrino
+alias anti_n = N1:N2:N3 				#create alias for N is any flavour anti-neutrino
+alias q = u:d:c:s					#create alias for q is either up, down, charm, strange
+alias anti_q = U:D:C:S
+alias j = q:anti_q:g
+
+
+process ttV = e1, E1 => t, T, Z + h			# has to be written like this because Z and H have different helicities and masses
+
+
+#decays of Higgs
+process h_dec_bb = h => b, B				#defines the Higgs decay mode with the largest branching fraction
+process h_dec_tautau = h => e3, E3			#defines the Higgs decay mode with relatively large branching fraction
+
+#decays of Z boson
+process Z_dec_nN = Z => n, anti_n			#defines decay mode of Z boson to neutrino + anti-neutrino
+process Z_dec_qQ = Z => q, anti_q			#defines decay mode of Z boson to quark anti-quark
+
+#decay of t and T
+process t1_dec = t => Wp, b				#defines decays of top quark
+process t2_dec = T => Wm, B				#only one decay process defined -> whizard assumes BR=100%
+
+
+unstable Z (Z_dec_nN, Z_dec_qQ)				#specify the unstable particles and their decay modes.
+unstable h (h_dec_bb, h_dec_tautau)
+unstable t (t1_dec)
+unstable T (t2_dec)
+unstable Wp () { ?auto_decays = true } 
+unstable Wm () { ?auto_decays = true } 
+
+
+sqrts = 1 TeV						#set the c.o.m. energy 
+beams = e1, E1						#define the beams as e+ e-
+
+compile	    						#this generates matrix elements by O'Mega
+
+?ps_fsr_active = true	  				#setting the final state radiation to be active
+?ps_isr_active = true	  				#setting the intial state radiation to be active
+?hadronization_active = true	   			#setting the hadronisation to be active
+
+
+ps_max_n_flavors = 5					#defines how many flavours are included in shower. this is u,d,c,s,b
+ps_mass_cutoff = 1    					#this is the default value. related to virtuality
+
+?mlm_matching = true
+mlm_nmaxMEjets = 5					#this defines the maximum no. of additional jet processes to occur after the initial collision
+mlm_Rmin = 1
+mlm_ETclusminE = 10 GeV
+real ycut = mlm_ETclusminE**2
+cuts = all kT > ycut [j, j]
+
+
+integrate(ttV)						#computes the total cross section of the process
+
+n_events = 10						#run for 10 events
+
+
+$extension_stdhep="stdhep"	
+sample_format = stdhep					#define output file to be stdhep format
+
+
+
+####################################################################################
+########## EXAMPLES OF HOW TO PRODUCE HISTOGRAMS FROM WITHIN WHIZARD ###############
+
+
+# Define title etc. as global variables, that will be used by PLOT
+#$description =
+#  "ILC t $\bar{t}$ V Production."
+#$y_label = "$N_{\textrm{events}}$"
+
+# Allocate plots
+
+#Invariant mass of jets
+#$title = "Di-jet invariant mass $M_{jj}$ in $e^+e^- -> t\bar{t} V$"
+#$x_label = "$M_{jj}$/GeV"
+#histogram m_jets (0 GeV, 1 TeV, 10 GeV)
+
+#invariant mass of b
+#$title = "$bb$ invariant mass distribution in $e^+e^- -> t \bar{t} V$"
+#$x_label = "$M_{b\bar b}$/GeV"
+#histogram m_bb (0 GeV, 1 TeV, 10 GeV)
+
+#$title = "$P_{T}$ Distribution"
+#$x_label = "$P_{T}$/GeV"
+#histogram pt_distribution (0 GeV, 500 GeV, 10 GeV)
+
+#analysis = record (Pt)
+
+######################################################################################
+
+
+
+simulate(ttV)								#generate an event sample
+#compile_analysis { $out_file = "ttV_analysis.dat" }			#compile the analysis sequences and store them in dat file
+
+
+show (results)	    	      			   			#print the current values
+

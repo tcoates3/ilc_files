@@ -1,0 +1,56 @@
+###########################################################################
+## Example sindarin file producing e+e- => q q-bar. Where the quarks can ##
+## be either an up, down or strange. It is for c.o.m.energy = 500 GeV    ##
+## and hadronisation process is turned on.     		      	  	 ##
+###########################################################################
+
+
+model = SM					#Standard Model
+
+ms = 0 						# set strange to 0 because u and d mass is 0 by default
+
+alias q = u:d:s	      				#defining quark to be either u,d or s
+alias Q = U:D:S	      				#capitals refer to antiparticle i.e. U is anti-up
+alias j = q:Q:g	      
+
+process eeqq = e1, E1 => q, Q			#defined the process
+
+	       	      	    			# e1 and E1. e1 is an electron. E1 is a positron(anti-electron). 1 means 1st generation. For example E2 is a mu+.
+
+compile  					#this generates matrix elements by O'Mega
+
+sqrts = 500 GeV					#setting the centre-of-mass energy
+beams = e1, E1					#defining the beams to be electron and positron
+
+?ps_fsr_active = true	  			#setting the final state radiation to be active
+?ps_isr_active = true	  			#setting the intial state radiation to be active
+?hadronization_active = true	   		#setting the hadronisation to be active
+
+ps_max_n_flavors = 5  				#defining the maximum no. of flavours involved in the hadronisation process to be 5
+ps_mass_cutoff = 1 				#standard value of this is 1, and it is related to the virtuality
+
+?mlm_matching = true	
+mlm_nmaxMEjets = 2				#this defines the maximum no. of additional jet processes to occur after the initial collision
+mlm_Rmin = 1
+mlm_ETclusminE = 10 GeV
+real ycut = mlm_ETclusminE**2
+
+
+cuts = all kT > ycut [j, j]
+#cuts = all Dist > 0.4 [q, Q]  	      
+#cuts = all M > 1 GeV [q, Q]			#invariant mass cut for quark pairs
+
+
+
+integrate(eeqq) { iterations = 2:20000 }	#computes the total cross section of the process
+
+n_events = 10     	       	       		#run for 10 events
+
+
+
+$extension_stdhep="stdhep"	
+sample_format = stdhep				#states that it is to produce a .stdhep file
+
+simulate(eeqq)					#generate an event sample
+
+show (results)					#print the current values

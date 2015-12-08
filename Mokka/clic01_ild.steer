@@ -1,0 +1,76 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# LOCAL MYSQL SERVER, OR pollin1.in2p3.fr
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#/Mokka/init/dbHost pollin1.in2p3.fr
+#/Mokka/init/dbHost polui01.in2p3.fr
+#/Mokka/init/dbHost pccds03.cern.ch
+/Mokka/init/user consult
+/Mokka/init/dbPasswd consult
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# DETECTOR MODEL - this section allows for user to choose the detector
+# Both the ILD and SiD detector concepts are available here
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#/Mokka/init/detectorModel ILD_00fwp01				
+/Mokka/init/detectorModel CLIC_ILD_CDR
+#/Mokka/init/detectorModel SiD01
+#/Mokka/init/lorentzTransformationAngle 10 mrad 
+/Mokka/init/physicsListName QGSP_BERT
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Verbosity / Batch Mode
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Mokka/init/printLevel 0
+/Mokka/init/BatchMode false
+
+/Mokka/init/initialMacroFile stdhep.mac				# This is where another macro file can be introduced
+#/Mokka/init/initialMacroFile opengraphics.mac			# This macro file initiates a Geant4 user interface
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Changing the Geometry
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#/Mokka/init/EditGeometry/rmSubDetector all
+
+#/Mokka/init/EditGeometry/addSubDetector SHcalSc02 300
+
+
+#/Mokka/init/globalModelParameter Hcal_nlayers 30
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# OUTPUT OF SLCIO/ASCII
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Name of LCIO output file - this implies LCIO output !!
+/Mokka/init/lcioFilename ttbar.slcio				# The name of the output .slcio file has to be named
+
+# Write mode of LCIO output file: WRITE_APPEND or WRITE_NEW
+# if not specified the program will exit if the file already exists (safe mode)
+# ------------------------------------------------------------------------------
+/Mokka/init/lcioWriteMode WRITE_NEW
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# GENERAL VARIABLES (ENVIRONMENT / CUTS)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Mokka/init/rangeCut 0.005 mm
+#  specifies the production Geant4 range cut
+#  [default is 0.005 mm ]
+
+
+
+
+/Mokka/init/lcioStoreCalHitPosition true
+#/Mokka/init/TPCCut 0.0 keV #Default is 10MeV
+/Mokka/init/lcioDetailedShowerMode true
+
+
+#/Mokka/init/globalModelParameter use_tracker true
+#/Mokka/init/lcioStoreTRKHitMomentum proto
+

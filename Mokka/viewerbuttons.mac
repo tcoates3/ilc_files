@@ -1,0 +1,54 @@
+
+#Adds the menus, so that buttons can be added to them.
+
+/gui/addMenu views View
+/gui/addMenu zoom Zoom
+/gui/addMenu pan Pan
+
+#Adds buttons for preset viewing angles.
+
+/gui/addButton views "Isometric view" "/vis/viewer/set/viewpointThetaPhi 45 45"
+/gui/addButton views "Down-the-barrel view" "/vis/viewer/set/viewpointThetaPhi 0 0"
+/gui/addButton views "Side-on" "/vis/viewer/set/viewpointThetaPhi 90 0"
+/gui/addButton views "Top-down" "/vis/viewer/set/viewpointVector 0 30 1"
+
+#Adds buttons for zooming in and out, and preset zoom levels.
+
+/gui/addButton zoom "Zoom in" "/vis/viewer/zoom 2"
+/gui/addButton zoom "Zoom out" "/vis/viewer/zoom 0.5"
+/gui/addButton zoom "Zoom in lots" "/vis/viewer/zoom 5"
+/gui/addButton zoom "Zoom out lots" "/vis/viewer/zoom 0.2"
+
+/gui/addButton zoom "---" "/vis/viewer/zoom 1"
+
+/gui/addButton zoom "Zoom level 1 (whole scene)" "/vis/viewer/zoomTo 1"
+/gui/addButton zoom "Zoom level 2 (closeup of detector)" "/vis/viewer/zoomTo 2"
+/gui/addButton zoom "Zoom level 5 (closeup of calorimeter)" "/vis/viewer/zoomTo 5"
+/gui/addButton zoom "Zoom level 10" "/vis/viewer/zoomTo 10"
+/gui/addButton zoom "Zoom level 20" "/vis/viewer/zoomTo 20"
+/gui/addButton zoom "Zoom level 30" "/vis/viewer/zoomTo 30"
+
+#Adding buttons for panning around.
+
+/gui/addButton pan "Centre view" "/vis/viewer/panTo 0 1.5"
+
+/gui/addButton pan "---" "/vis/viewer/pan 0 0"
+
+/gui/addButton pan "Pan up by 0.1" "/vis/viewer/pan 0 0.1"
+/gui/addButton pan "Pan down by 0.1" "/vis/viewer/pan 0 -0.1"
+/gui/addButton pan "Pan left by 0.1" "/vis/viewer/pan -0.1 0"
+/gui/addButton pan "Pan right by 0.1" "/vis/viewer/pan 0.1 0"
+
+/gui/addButton pan "---" "/vis/viewer/pan 0 0"
+
+/gui/addButton pan "Pan up by 1" "/vis/viewer/pan 0 1"
+/gui/addButton pan "Pan down by 1" "/vis/viewer/pan 0 -1"
+/gui/addButton pan "Pan left by 1" "/vis/viewer/pan -1 0"
+/gui/addButton pan "Pan right by 1" "/vis/viewer/pan 1 0"
+
+/gui/addButton pan "---" "/vis/viewer/pan 0 0"
+
+/gui/addButton pan "Pan up by 5" "/vis/viewer/pan 0 5"
+/gui/addButton pan "Pan down by 5" "/vis/viewer/pan 0 -5"
+/gui/addButton pan "Pan left by 5" "/vis/viewer/pan -5 0"
+/gui/addButton pan "Pan right by 5" "/vis/viewer/pan 5 0"

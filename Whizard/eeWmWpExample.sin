@@ -1,0 +1,34 @@
+###########################################################################
+## Example sindarin file producing e+e- => W+ W-.  It is for             ##
+## c.o.m.energy = 500 GeV and W+ W- are unstable process is turned on.   ##
+###########################################################################
+
+
+model = SM					#Standard Model
+
+process eeWmWp = e1, E1 => Wp, Wm		#defined the process
+
+unstable Wp () { ?auto_decays = true } 		#states that the W+ is unstable
+unstable Wm () { ?auto_decays = true }		#states that the W- is unstable
+
+
+compile  					#this generates matrix elements by O'Mega
+
+sqrts = 500 GeV					#setting the centre-of-mass energy
+beams = e1, E1					#defining the beams to be electron and positron
+
+?ps_fsr_active = true	  			#setting the final state radiation to be active
+?ps_isr_active = true	  			#setting the intial state radiation to be active
+
+
+integrate(eeWmWp) 				#computes the total cross section of the process
+
+n_events = 10     	       	       		#run for 10 events
+
+
+$extension_stdhep="stdhep"	
+sample_format = stdhep				#states that it is to produce a .stdhep file
+
+simulate(eeWmWp)				#generate an event sample
+
+show (results)					#print the current values

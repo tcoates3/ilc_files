@@ -16,7 +16,7 @@ import time
 import subprocess
 
 def submit_job(name, command, output_path, queue='mps.q', binary='y'):
-  job_id=subprocess.check_output(["qsub","-terse","-q",queue,"-b",binary,"-S","/bin/bash","-N",name,"-j","y","-o",output_path,"-cwd",command]).strip()
+  job_id=subprocess.check_output(["qsub","-terse", "-jc", "mps.short","-q",queue,"-b",binary,"-S","/bin/bash","-N",name,"-j","y","-o",output_path,"-cwd",command]).strip()
   logger.info('Submitted {} job: {}'.format(name, job_id))
   return job_id.strip()
 
@@ -43,13 +43,9 @@ if __name__ == '__main__':
 
   #Core arguments. Santize the inputs somewhat by removing whitespace and trailing '/'
   sin_file=args.sin_file.strip().rstrip('/')
+  sin_file=os.path.abspath(sin_file)
  
   project_dir=args.project_dir.strip().rstrip('/')
-
-  with open(sin_file) as f: lines = f.read().splitlines()
-  for line in lines:
-    if line.startswith('n_events ='):
-      num_runs = line.split('=')[-1].strip()
 
   # Expand OS variables
   project_dir=os.path.expandvars(project_dir)
@@ -62,11 +58,11 @@ if __name__ == '__main__':
   else:
     logger.setLevel(logging.INFO)
 
-  # Checks to see whether the base_log_dir exists and if it doesn't, makes it. Should only be important the first time the script is run. 
-  if os.path.isdir(base_log_dir) == False:
-    os.makedirs(base_log_dir)
-  else: 
-    logger.warning('Outputs dir: {} already exists.'.format(base_log_dir))
+  #Pull the number of events out of the sindarin file
+  with open(sin_file) as f: lines = f.read().splitlines()
+  for line in lines:
+    if line.startswith('n_events ='):
+      num_runs = line.split('=')[-1].strip()
 
   # Create console handler
   ch = logging.StreamHandler()
@@ -75,6 +71,12 @@ if __name__ == '__main__':
   ch.setFormatter(formatter)
   # Add handlers to logger
   logger.addHandler(ch)
+
+  # Checks to see whether the base_log_dir exists and if it doesn't, makes it. Should only be important the first time the script is run. 
+  if os.path.isdir(base_log_dir) == False:
+    os.makedirs(base_log_dir)
+  else: 
+    logger.warning('Outputs dir: {} already exists.'.format(base_log_dir))
 
   #EDIT - Defining basename (moved to make other things work)
   basename = os.path.splitext(os.path.basename(sin_file))[0] 
@@ -119,9 +121,9 @@ if __name__ == '__main__':
   subprocess.Popen('cp {} {}/'.format(sin_file, log_dir), shell=True, universal_newlines=True)
 
   # Generate stdhep.mac and clic01_ild.steer files
-  macro_template = project_dir+'/run_job/run_job_files/stdhep.mac.template'
+  macro_template = project_dir+'/ilc_files/run_job/run_job_files/stdhep.mac.template'
   macro_file = log_dir+'/stdhep.mac'
-  steer_template = project_dir+'/run_job/run_job_files/clic01_ild.steer.template'
+  steer_template = project_dir+'/ilc_files/run_job/run_job_files/clic01_ild.steer.template'
   steer_file = log_dir+'/clic01_ild.steer'
 
   with open(macro_file,'w') as macro:
@@ -134,21 +136,21 @@ if __name__ == '__main__':
 
   logger.info('Running whizard...')
   whizard_job_name = 'whizard'
-  whizard_command = 'cd {} && mkdir whizard && cd whizard && source /lustre/scratch/epp/ilc/ILCsetup.sh; whizard {}/{}'.format(log_dir, log_dir, sin_file)
+  whizard_command = 'cd {} && mkdir whizard && cd whizard && source /lustre/scratch/epp/ilc/GeneralILCsetup.sh; whizard {}'.format(log_dir, sin_file)
   whizard_output = log_dir+'/'+'whizard.job.log'
-  whizard_job_id = submit_job(whizard_job_name, whizard_command, whizard_output, 'mps.q@node212')
+  whizard_job_id = submit_job(whizard_job_name, whizard_command, whizard_output)
 
   logger.info('Stdhep File:     {}'.format(stdhep_file))
   logger.info('Slcio File:      {}'.format(slcio_file))
 
   logger.info('Running Mokka...')
   mokka_job_name='mokka'
-  mokka_command = 'cd {} && mkdir mokka && cd mokka && source /lustre/scratch/epp/ilc/ILCsetup.sh; Mokka {}'.format(log_dir, steer_file)
+  mokka_command = 'cd {} && mkdir mokka && cd mokka && source /lustre/scratch/epp/ilc/GeneralILCsetup.sh; Mokka {}'.format(log_dir, steer_file)
   mokka_output = log_dir+'/'+'mokka.job.log'
   mokka_job_id = submit_dependent_job(mokka_job_name, mokka_command, mokka_output, whizard_job_id)
 
   logger.info('Running dumpevent...')
   dumpevent_job_name='dumpevent'
-  dumpevent_command = 'source /lustre/scratch/epp/ilc/ILCsetup.sh; dumpevent {} 1'.format(log_dir, slcio_file)
+  dumpevent_command = 'source /lustre/scratch/epp/ilc/GeneralILCsetup.sh; dumpevent {} 1'.format(log_dir, slcio_file)
   dumpevent_output = log_dir+'/'+'dumpevent_{}.log'.format(basename)
   dumpevent_job_id = submit_dependent_job(dumpevent_job_name, dumpevent_command, dumpevent_output, whizard_job_id)

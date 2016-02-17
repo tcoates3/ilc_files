@@ -21,7 +21,7 @@ def submit_job(name, command, output_path, queue='mps.q', binary='y'):
   return job_id.strip()
 
 def submit_dependent_job(name, command, output_path, parent_job_id, queue='mps.q', binary='y'):
-  job_id=subprocess.check_output(["qsub","-terse","-hold_jid",parent_job_id,"-q",queue,"-b",binary,"-S","/bin/bash","-N",name,"-j","y","-o",output_path,"-cwd",command]).strip()
+  job_id=subprocess.check_output(["qsub","-terse","-hold_jid",parent_job_id,"-jc","mps.long","-q",queue,"-b",binary,"-S","/bin/bash","-N",name,"-j","y","-o",output_path,"-cwd",command]).strip()
   logger.info('Submitted {} job: {}'.format(name, job_id))
   return job_id
 

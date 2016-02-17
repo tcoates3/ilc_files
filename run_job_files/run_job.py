@@ -138,7 +138,7 @@ if __name__ == '__main__':
   whizard_job_name = 'whizard'
   whizard_command = 'cd {} && mkdir whizard && cd whizard && source /lustre/scratch/epp/ilc/GeneralILCsetup.sh; whizard {}'.format(log_dir, sin_file)
   whizard_output = log_dir+'/'+'whizard.job.log'
-  whizard_job_id = submit_job(whizard_job_name, whizard_command, whizard_output, 'mps.q@node212')
+  whizard_job_id = submit_job(whizard_job_name, whizard_command, whizard_output)
 
   logger.info('Stdhep File:     {}'.format(stdhep_file))
   logger.info('Slcio File:      {}'.format(slcio_file))

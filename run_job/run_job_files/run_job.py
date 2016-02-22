@@ -54,6 +54,8 @@ if __name__ == '__main__':
     mokka_length = 'mps.medium'
   elif args.length == 'l':
     mokka_length = 'mps.long'
+  else:
+    mokka_length = 'mps.short'
 
   # Expand OS variables
   project_dir=os.path.expandvars(project_dir)

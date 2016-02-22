@@ -15,12 +15,12 @@ import sys
 import time
 import subprocess
 
-def submit_job(name, command, output_path, length, queue='mps.q', binary='y'):
+def submit_job(name, command, output_path, length='mps.short', queue='mps.q', binary='y'):
   job_id=subprocess.check_output(["qsub","-terse", "-jc", length,"-q",queue,"-b",binary,"-S","/bin/bash","-N",name,"-j","y","-o",output_path,"-cwd",command]).strip()
   logger.info('Submitted {} job: {}'.format(name, job_id))
   return job_id.strip()
 
-def submit_dependent_job(name, command, output_path, parent_job_id, length, queue='mps.q', binary='y'):
+def submit_dependent_job(name, command, output_path, parent_job_id, length='mps.short', queue='mps.q', binary='y'):
   job_id=subprocess.check_output(["qsub","-terse","-hold_jid",parent_job_id,"-jc",length,"-q",queue,"-b",binary,"-S","/bin/bash","-N",name,"-j","y","-o",output_path,"-cwd",command]).strip()
   logger.info('Submitted {} job: {}'.format(name, job_id))
   return job_id
@@ -35,7 +35,7 @@ if __name__ == '__main__':
   parser.add_argument('sin_file', action="store", help='Path to input.sin file')
   #Commented this line as the code now grabs num_runs from the .sin file
   #parser.add_argument('num_runs', action="store", help='number of runs')
-  parser.add_argument('jc', action="store", help='Specify s for a short job, m for a medium job or l for a long job')
+  parser.add_argument('-l', '--length', action="store", choices=['s','m','l'], help='Specify s for a short job, m for a medium job or l for a long job')
   parser.add_argument('--debug', action="store_true", dest='debug', default=False, help='Enable debug output')
   parser.add_argument('--project_dir', action="store", dest='project_dir', default='/lustre/scratch/epp/ilc/$USER', help='Full path to where the output folder will be')
   #parser.add_argument('--log_dir', action="store", dest='log_dir', default='/lustre/scratch/epp/ilc/$USER/logs', help='Full path to where logs')
@@ -48,14 +48,12 @@ if __name__ == '__main__':
   project_dir=args.project_dir.strip().rstrip('/')
 
   #Set Mokka run length (if user enters a value that is not s/m/l, default to short)
-  if args.jc == 's':
-    jc = "mps.short"
-  elif args.jc == 'm':
-    jc = "mps.medium"
-  elif args.jc == 'l':
-    jc = "mps.long"
-  else:
-    jc = "mps.short"
+  if args.length == 's':
+    mokka_length = 'mps.short'
+  elif args.length == 'm':
+    mokka_length = 'mps.medium'
+  elif args.length == 'l':
+    mokka_length = 'mps.long'
 
   # Expand OS variables
   project_dir=os.path.expandvars(project_dir)
@@ -126,7 +124,7 @@ if __name__ == '__main__':
   logger.info('Log Dir:         {}'.format(log_dir))
   logger.info('Sin File:        {}'.format(sin_file))
   logger.info('Num Runs:        {}'.format(num_runs))
-  logger.info('Job Length:      {}'.format(jc))
+  logger.info('Job Length:      {}'.format(mokka_length))
 
   # Copy input.sin file to log_dir
   subprocess.Popen('cp {} {}/'.format(sin_file, log_dir), shell=True, universal_newlines=True)
@@ -158,7 +156,7 @@ if __name__ == '__main__':
   mokka_job_name='mokka'
   mokka_command = 'cd {} && mkdir mokka && cd mokka && source /lustre/scratch/epp/ilc/GeneralILCsetup.sh; Mokka {}'.format(log_dir, steer_file)
   mokka_output = log_dir+'/'+'mokka.job.log'
-  mokka_job_id = submit_dependent_job(mokka_job_name, mokka_command, mokka_output, whizard_job_id, jc)
+  mokka_job_id = submit_dependent_job(mokka_job_name, mokka_command, mokka_output, whizard_job_id, mokka_length)
 
   logger.info('Running dumpevent...')
   dumpevent_job_name='dumpevent'

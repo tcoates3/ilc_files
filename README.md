@@ -17,8 +17,10 @@
 
 ## USAGE
 
-To use, make sure that the ILCsetup.sh file has been sourced, then type:
+To use, make sure that the GeneralILCsetup.sh file has been sourced, then type:
 
-    run_job <sindarin file>
+    run_job <sindarin file> -l <length>
 
-This (should) do everything right, since the methods for finding directories are now (relatively) robust. This command will create a folder within your /run_job/output directory titled with the name of the Sindarin file. Within this will be another folder named with timestamp of when the run_job command was issued, followed by the number of events it was run for.
+where <length> is either s, m or l for a short, medium, or long Mokka job. Short jobs will be killed after 2 hours, medium jobs after 8 hours and long jobs after 5 days. The length argument is optional, and it will default to short.
+
+This *should* do everything right, since the methods for finding directories are now (relatively) robust. This command will create a folder within your /run_job/output directory titled with the name of the Sindarin file. Within this will be another folder named with timestamp of when the run_job command was issued, followed by the number of events it was run for.

@@ -74,7 +74,7 @@ if __name__ == '__main__':
     if line.startswith('n_events ='):
       line = line.split('#', 1)[0]
       line = line.rstrip()
-      num_runs = line.split('=')[-1].strip()
+      num_runs = int(line.split('=')[-1].strip())
 
   # Create console handler
   ch = logging.StreamHandler()

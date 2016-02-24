@@ -72,6 +72,8 @@ if __name__ == '__main__':
   with open(sin_file) as f: lines = f.read().splitlines()
   for line in lines:
     if line.startswith('n_events ='):
+      line = line.split('#', 1)[0]
+      line = line.rstrip()
       num_runs = line.split('=')[-1].strip()
 
   # Create console handler

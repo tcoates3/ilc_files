@@ -26,6 +26,7 @@ using namespace lcio ;
 using namespace marlin ;
 
 bool mydebug = false;
+bool debug = false;
 
 
 
@@ -38,7 +39,7 @@ SignalSeparator::SignalSeparator() : Processor("SignalSeparator")
 
   // modify processor description
   _description = "SignalSeparator looks at a collection of input files and seperates them into different types of decay such as WW->leptonic and WW->hadronic. By varying \"choice\" you can choose which events to let pass- 1=semileptonic 2=leptonic 3=hadronic 4= other";
-  _description = "New version of SignalSeparator that looks at a collection of input files and seperates them into differnt types of decay such as WW->leptonic and ww->hadronic, but customised specifically for the ttV process. By varying \"choice\" you can chose which events to let pass= 1=semileptonic 2=leptonic 3=hadronic 4=INVALID 5=all events"
+  _description = "New version of SignalSeparator that looks at a collection of input files and seperates them into differnt types of decay such as WW->leptonic and ww->hadronic, but customised specifically for the ttV process. By varying \"choice\" you can chose which events to let pass= 1=?? 2=?? 3=?? 4=?? 5=??"
 
 
   // register steering parameters: name, description, class-variable, default value
@@ -158,7 +159,7 @@ void SignalSeparator::processEvent( LCEvent * evt )
 
 	  if(mydebug){
 	    std::cout << "Particle number " << i << " is a " << mcp->getPDG() << std::endl;
-	    std::cout << "Particle four vector " << i << " is a " << mcp->ParticleVec() << std::endl;
+	    //std::cout << "Particle four vector " << i << " is a " << mcp->ParticleVec() << std::endl;
 	  }
 	  if(mcp->getPDG()== 25) {NumberHiggs++;}
 	  if(abs(mcp->getPDG())== 24) {NumberW++;}
@@ -200,7 +201,7 @@ void SignalSeparator::processEvent( LCEvent * evt )
       
       if(WLeptonic==2) // semileptonic -> if there are ONLY two leptons, both of which are daughters of W's, it can't be anything else.
 	{
-	  decaytype=1:
+	  decaytype=1;
 	  _nParticleSemiLeptonic->Fill(nMCP);
 	}
 
@@ -256,6 +257,10 @@ void SignalSeparator::processEvent( LCEvent * evt )
 
     }
 	   
+  std::cout<<"Number of leptonic decays "<<NumLeptonic<<std::endl;
+  std::cout<<"Number of semileptonic decays "<<NumSemileptonic<<std::endl;
+  std::cout<<"Number of hadronic decays "<<NumHadronic<<std::endl;
+
   if(debug)
     {
       std::cout<<"Number of Higgs "<<NumberHiggs<<std::endl;
@@ -317,11 +322,11 @@ void SignalSeparator::end(){
   std::cout<< "Events passed: "<< npassed<< "\n"<<"Events rejected: " << nskipped <<std::endl;
   std::cout<<"Number of Higgs bosons: "<< NumberHiggs <<std::endl;
   std::cout<<"Number of Z bosons: "<< NumberHiggs <<std::endl;
-  if(_choice==5)
+  if(_choice==5) // These aren't declared in this scope (in the end() functon), so it throws errors.
     {
-      std::cout<<"Number of leptonic decays: "<<NumLeptonic<<std::endl;
-      std::cout<<"Number of semileptonic decays: "<<NumSemileptonic<<std::endl;
-      std::cout<<"Number of hadronic decays: "<<NumHadronic<<std::endl;
+      // std::cout<<"Number of leptonic decays: "<<NumLeptonic<<std::endl;
+      //std::cout<<"Number of semileptonic decays: "<<NumSemileptonic<<std::endl;
+      //std::cout<<"Number of hadronic decays: "<<NumHadronic<<std::endl;
     }
 
 }

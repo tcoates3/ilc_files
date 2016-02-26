@@ -38,7 +38,7 @@ SignalSeparator::SignalSeparator() : Processor("SignalSeparator")
 
   // modify processor description
   _description = "SignalSeparator looks at a collection of input files and seperates them into different types of decay such as WW->leptonic and WW->hadronic. By varying \"choice\" you can choose which events to let pass- 1=semileptonic 2=leptonic 3=hadronic 4= other";
-  _description = "New version of SignalSeparator that looks at a collection of input files and seperates them into differnt types of decay such as WW->leptonic and ww->hadronic, but customised specifically for the ttV process. By varying \"choice\" you can chose which events to let pass= 1=?? 2=?? 3=?? 4=?? 5=??"
+  _description = "New version of SignalSeparator that looks at a collection of input files and seperates them into differnt types of decay such as WW->leptonic and ww->hadronic, but customised specifically for the ttV process. By varying \"choice\" you can chose which events to let pass= 1=semileptonic 2=leptonic 3=hadronic 4=INVALID 5=all events"
 
 
   // register steering parameters: name, description, class-variable, default value

@@ -36,6 +36,7 @@ if __name__ == '__main__':
   #Commented this line as the code now grabs num_runs from the .sin file
   #parser.add_argument('num_runs', action="store", help='number of runs')
   parser.add_argument('-l', '--length', action="store", choices=['s','m','l'], help='Specify s for a short job, m for a medium job or l for a long job')
+# parser.add_argument('-a', '--append', action="store", choices=['n','a'], help='Specify whether to write a new file or append to the old one. n writes new file, a appends.')
   parser.add_argument('--debug', action="store_true", dest='debug', default=False, help='Enable debug output')
   parser.add_argument('--project_dir', action="store", dest='project_dir', default='/lustre/scratch/epp/ilc/$USER', help='Full path to where the output folder will be')
   #parser.add_argument('--log_dir', action="store", dest='log_dir', default='/lustre/scratch/epp/ilc/$USER/logs', help='Full path to where logs')
@@ -146,6 +147,11 @@ if __name__ == '__main__':
   with open(steer_file,'w') as steer:
     cmd="sed -e 's|<MACRO_FILE>|'{}'|g' -e 's|<SLCIO_FILE>|{}|g' {}".format(macro_file, slcio_file, steer_template)
     proc = subprocess.Popen(cmd, shell=True, universal_newlines=True, stdout=steer)
+
+# Alternative search-and-replace for the Mokka steering file to add an option to change write mode from "new" to "append" 
+# with open(steer_file,'w') as steer:
+#   cmd="sed -e 's|<MACRO_FILE>|'{}'|g' -e 's|<SLCIO_FILE>|{}|g' -e 's|<WRITE_MODE>|{}|g' {}".format(macro_file, slcio_file, write_mode, steer_template)
+#   proc = subprocess.Popen(cmd, shell=True, universal_newlines=True, stdout=steer)
 
   logger.info('Running whizard...')
   whizard_job_name = 'whizard'

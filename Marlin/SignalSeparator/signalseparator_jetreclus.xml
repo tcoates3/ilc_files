@@ -1,0 +1,39 @@
+<!-- This steering file runs the SignalSeparator processor; make sure the processor is installed correctly otherwise this won't work -->
+
+<marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
+  <execute>
+    <processor name="MyAIDAProcessor"/>
+    <processor name="MySignalSeparator"/>
+    <processor name="MyLCIOOutputProcessor"/>
+  </execute>
+  
+  <!-- Set the paths here to your LCIO file (the one that came out of the jet reclustering) and the Gear.xml file that comes with it (not sure if this is important) -->
+  <global>
+    <parameter name="LCIOInputFiles" type="string"> /lustre/scratch/epp/ilc/tc297/Marlin/MarlinFastJet/RECLUSTEST_ttV_autodecay_Run1_Reco_DST_Jets_Reclus.slcio </parameter>
+    <parameter name="GearXMLFile"value="/lustre/scratch/epp/mg380/Mokka/batch_job/1000/1000_9/GearOutput.xml"/>
+    <parameter name="MaxRecordNumber" value="10000000"/>
+    <parameter name="SkipNEvents" value="0"/>
+    <parameter name="SupressCheck" value="false"/>
+    <parameter name="Verbosity" value="MESSAGE"/>
+  </global>
+
+  <processor name="MyAIDAProcessor" type="AIDAProcessor">
+    <parameter name="Compress" type="int" value="1"/>
+    <!-- Enter the filename you want, without the extension -->
+    <parameter name="FileName" type="string" value="Run1_reclustering_test"/>
+    <!-- The file extension to decide what type of file this is; leave as .root for now  -->
+    <parameter name="FileType" type="string" value="root"/>
+  </processor>
+
+  <!-- On old imput parameter for the processor that's no longer used; left in to avoid breaking anything -->
+  <processor name="MySignalSeparator" type="SignalSeparator">
+    <parameter name="Choice" type="int">1</parameter>
+  </processor>
+
+  <!-- Set the paths here to the output LCIO file; I've yet to use this but it's probably best to do it anyway -->
+  <processor name="MyLCIOOutputProcessor" type="LCIOOutputProcessor">
+    <parameter name="LCIOOutputFile" type="string">Run1_reclustering_test.slcio</parameter>
+    <parameter name="LCIOWriteMode" type="string">WRITE_NEW</parameter>
+  </processor>
+
+</marlin>

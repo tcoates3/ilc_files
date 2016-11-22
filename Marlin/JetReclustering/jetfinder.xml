@@ -1,0 +1,43 @@
+<!-- This file is the first stage of jet reclustering; it takes the reconstructed LCIO file and adds another collection to it, containing the preliminary jets. -->
+
+<?xml version="1.0" encoding="us-ascii"?>
+	<!--
+		?xml-stylesheet type="text/xsl"
+		href="http://ilcsoft.desy.de/marlin/marlin.xsl"?
+	-->
+	<!-- ?xml-stylesheet type="text/xsl" href="marlin.xsl"? -->
+
+<marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
+	<execute>
+		<processor name="MyFastJetProcessor" />
+		<processor name="MyLCIOOutputProcessor" />
+	</execute>
+
+	<!-- Change the directory below to the path to your slcio file -->
+	<global>
+		<parameter name="LCIOInputFiles">/lustre/scratch/epp/ilc/tc297/Marlin/Reconstruction/ttV_autodecay_Run1_Reco_DST.slcio </parameter>
+		<parameter name="SkipNEvents" value="0" />
+		<parameter name="SupressCheck" value="false" />
+		<parameter name="Verbosity"	options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE  </parameter>
+	</global>
+
+	<processor name="MyFastJetProcessor" type="FastJetProcessor">
+		<parameter name="algorithm" type="StringVec">antikt_algorithm 0.4</parameter>
+		<parameter name="clusteringMode" type="StringVec"> Inclusive 5</parameter>
+		<parameter name="jetOut" type="string" lcioOutType="ReconstructedParticle">ReconstructedJets </parameter>
+		<parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
+		<parameter name="recombinationScheme" type="string">E_scheme </parameter>
+	</processor>
+
+	<!-- Change the directory below to the path you want to write your new slcio file to -->
+	<processor name="MyLCIOOutputProcessor" type="LCIOOutputProcessor">
+		<parameter name="LCIOOutputFile" type="string">/lustre/scratch/epp/ilc/tc297/Marlin/MarlinFastJet/RECLUSTEST_ttV_autodecay_Run1_Reco_DST_Jets.slcio </parameter>
+		<parameter name="LCIOWriteMode" type="string">WRITE_NEW</parameter>
+		<!--parameter name="SplitFileSizekB" type="int">1992294 </parameter-->
+	</processor>
+
+	<processor name="ProgressProcessor" type="ProgressProcessor">
+	</processor>
+
+</marlin>

@@ -1,7 +1,7 @@
 """run_job
 
 Usage:
-  run_job <sin_file>
+  run_job <sin_file> -l <s, m or l>
 
 Options:
 """
